@@ -70,18 +70,28 @@ bot.on("text", async (ctx) => {
   }
 });
 
-const isWebhook = process.env.USE_WEBHOOK === "true";
-const PORT = process.env.PORT || 3000;
-const WEBHOOK_URL = process.env.WEBHOOK_URL || "";
+// const isWebhook = process.env.USE_WEBHOOK === "true";
+// const PORT = process.env.PORT || 3000;
+// const WEBHOOK_URL = process.env.WEBHOOK_URL || "";
 
-if (isWebhook && WEBHOOK_URL) {
-  bot.telegram.setWebhook(`${WEBHOOK_URL}/bot${BOT_TOKEN}`);
-  bot.startWebhook(`/bot${BOT_TOKEN}`, null, PORT);
-  console.log(`Webhook mode enabled at ${WEBHOOK_URL}/bot${BOT_TOKEN}`);
-} else {
-  bot.launch();
-  console.log("Polling mode enabled");
-}
+// if (isWebhook && WEBHOOK_URL) {
+//   bot.telegram.setWebhook(`${WEBHOOK_URL}/bot${BOT_TOKEN}`);
+//   bot.startWebhook(`/bot${BOT_TOKEN}`, null, PORT);
+//   console.log(`Webhook mode enabled at ${WEBHOOK_URL}/bot${BOT_TOKEN}`);
+// } else {
+//   bot.launch();
+//   console.log("Polling mode enabled");
+// }
 
-process.once("SIGINT", () => bot.stop("SIGINT"));
-process.once("SIGTERM", () => bot.stop("SIGTERM"));
+// process.once("SIGINT", () => bot.stop("SIGINT"));
+// process.once("SIGTERM", () => bot.stop("SIGTERM"));
+
+export default async (req, res) => {
+  try {
+    await bot.handleUpdate(req.body);
+    res.status(200).send("OK");
+  } catch (error) {
+    console.error("Error handling update:", error.message);
+    res.status(500).send("Internal Server Error");
+  }
+};
