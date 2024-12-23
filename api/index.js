@@ -1,3 +1,4 @@
+import "dotenv/config";
 import { Telegraf } from "telegraf";
 import fetch from "node-fetch";
 
@@ -50,7 +51,7 @@ bot.on("text", async (ctx) => {
       console.error(
         `Failed to download PDF for PRN ${prn}: ${response.statusText}`
       );
-      return ctx.reply("Failed to fetch the PDF. Please check your details.");
+      return ctx.reply("Failed to fetch result. Please check your details.");
     }
 
     const buffer = await response.buffer();
